@@ -8,6 +8,7 @@ import {
   parseAsInteger,
   parseAsArrayOf,
 } from "nuqs";
+import { useRouter } from "next/navigation";
 import { MangaGrid } from "@/components/manga/manga-grid";
 import { SearchBar } from "@/components/filters/search-bar";
 import { SortSelect } from "@/components/filters/sort-select";
@@ -16,6 +17,8 @@ import { GeneralFilterDialog } from "@/components/filters/general-filter-dialog"
 import { getMangaList, searchManga } from "@/lib/api/manga";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
+import { PullToRefresh } from "@/components/ui/pull-to-refresh";
+import { useSwipeGesture } from "@/lib/hooks/use-swipe-gesture";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const LIMIT = 20;
@@ -29,6 +32,7 @@ const CATEGORY_MAP: Record<string, string> = {
 
 export default function Home() {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [searchParams, setSearchParams] = useQueryStates(
     {
       q: parseAsString,
@@ -334,10 +338,36 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [searchParams.page]);
 
+  // Swipe gestures for browser navigation
+  const swipeRef = useSwipeGesture({
+    onSwipeLeft: () => {
+      // Swipe left = forward (if available)
+      if (window.history.length > 1) {
+        router.forward();
+      }
+    },
+    onSwipeRight: () => {
+      // Swipe right = back
+      if (window.history.length > 1) {
+        router.back();
+      }
+    },
+    threshold: 50,
+    enabled: true,
+  });
+
+  // Handle pull to refresh
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey });
+  }, [queryClient, queryKey]);
+
   return (
     <>
       <Navbar />
-      <div className="container mx-auto min-h-screen px-4 py-6">
+      <div
+        ref={swipeRef}
+        className="container mx-auto min-h-screen px-4 py-4 sm:py-6"
+      >
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="flex-1 min-w-0">
             <SearchBar />
@@ -358,7 +388,9 @@ export default function Home() {
           </div>
         )}
 
-        <MangaGrid mangas={data?.mangaList || []} isLoading={isLoading} />
+        <PullToRefresh onRefresh={handleRefresh} disabled={isLoading}>
+          <MangaGrid mangas={data?.mangaList || []} isLoading={isLoading} />
+        </PullToRefresh>
 
         {!isLoading && data?.metaData && (
           <div
@@ -380,7 +412,7 @@ export default function Home() {
               disabled={
                 searchParams.page === 1 || data.metaData.totalPages <= 1
               }
-              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] text-xs sm:text-sm"
+              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] text-xs sm:text-sm min-h-[44px] active:scale-[0.98] touch-manipulation"
             >
               <ChevronLeft className="h-4 w-4" />
               <span className="hidden sm:inline">Previous</span>
@@ -416,7 +448,7 @@ export default function Home() {
                 searchParams.page >= data.metaData.totalPages ||
                 data.metaData.totalPages <= 1
               }
-              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] text-xs sm:text-sm"
+              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] text-xs sm:text-sm min-h-[44px] active:scale-[0.98] touch-manipulation"
             >
               <span className="hidden sm:inline">Next</span>
               <span className="sm:hidden">Next</span>

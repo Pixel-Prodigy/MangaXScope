@@ -27,7 +27,7 @@ export function GeneralFilterDialog() {
           <span className="truncate">General Filter</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[95vh] sm:max-h-[90vh] max-w-2xl w-[95vw] sm:w-full flex flex-col p-0 gap-0">
+      <DialogContent className="max-h-screen sm:max-h-[90vh] max-w-2xl w-full sm:w-full flex flex-col p-0 gap-0 rounded-none sm:rounded-lg">
         <DialogHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b shrink-0">
           <DialogTitle className="text-xl sm:text-2xl">
             General Filter
