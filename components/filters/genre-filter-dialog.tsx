@@ -241,7 +241,7 @@ export function GenreFilterDialog() {
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-screen sm:max-h-[85vh] max-w-4xl w-full sm:w-full flex flex-col p-0 gap-0 rounded-none sm:rounded-lg">
+      <DialogContent className="max-h-[95vh] sm:max-h-[85vh] max-w-4xl w-[95vw] sm:w-full flex flex-col p-0 gap-0">
         <DialogHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b shrink-0">
           <DialogTitle className="text-lg sm:text-xl">
             Filter by Genres

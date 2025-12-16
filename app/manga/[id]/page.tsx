@@ -1,7 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { getManga } from "@/lib/api/manga";
 import { Button } from "@/components/ui/button";
@@ -18,22 +19,13 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { OpenInAniyomiButton } from "@/components/manga/open-in-aniyomi-button";
-import { useSwipeGesture } from "@/lib/hooks/use-swipe-gesture";
 
 const PLACEHOLDER_IMAGE =
   "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
 
 export default function MangaDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const mangaId = params.id as string;
-
-  // Swipe left to go back - must be called before any conditional returns
-  const swipeRef = useSwipeGesture({
-    onSwipeLeft: () => router.back(),
-    threshold: 50,
-    enabled: true,
-  });
 
   const {
     data: manga,
@@ -63,9 +55,9 @@ export default function MangaDetailPage() {
           <p className="mb-4 text-sm text-muted-foreground">
             {error instanceof Error ? error.message : "Manga not found"}
           </p>
-          <Button variant="outline" onClick={() => router.back()}>
-            Go Back
-          </Button>
+          <Link href="/">
+            <Button variant="outline">Go Back Home</Button>
+          </Link>
         </div>
       </div>
     );
@@ -76,18 +68,13 @@ export default function MangaDetailPage() {
   return (
     <>
       <Navbar />
-      <div
-        ref={swipeRef}
-        className="container mx-auto min-h-screen px-4 py-4 sm:py-8"
-      >
-        <Button
-          variant="ghost"
-          className="mb-4 sm:mb-6 min-h-[44px] px-3 sm:px-4 active:bg-accent/70 touch-manipulation"
-          onClick={() => router.back()}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          <span className="text-sm sm:text-base">Back</span>
-        </Button>
+      <div className="container mx-auto min-h-screen px-4 py-8">
+        <Link href="/">
+          <Button variant="ghost" className="mb-6">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </Link>
 
         {/* Hero Section */}
         <motion.div
@@ -108,9 +95,9 @@ export default function MangaDetailPage() {
             />
           </div>
 
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-4">
             <div>
-              <h1 className="mb-2 text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">
+              <h1 className="mb-2 text-3xl font-bold tracking-tight md:text-4xl">
                 {manga.name}
               </h1>
               {manga.altTitles && manga.altTitles.length > 0 && (
@@ -202,7 +189,7 @@ export default function MangaDetailPage() {
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto min-h-[44px] shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all active:scale-[0.98] touch-manipulation"
+                  className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all"
                   disabled
                 >
                   <Play className="mr-2 h-4 w-4" />
@@ -216,7 +203,7 @@ export default function MangaDetailPage() {
 
             <OpenInAniyomiButton
               mangaId={manga.id}
-              className="w-full sm:w-auto min-h-[44px] shadow-md hover:shadow-lg transition-all active:scale-[0.98] touch-manipulation"
+              className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all"
             />
           </div>
         </motion.div>
