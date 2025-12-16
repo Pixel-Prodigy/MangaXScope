@@ -61,7 +61,9 @@ export function GenreFilterDialog() {
     useQuery<MangaDexTagsResponse>({
       queryKey: ["mangadex-tags"],
       queryFn: async () => {
-        const response = await fetch("https://api.mangadex.org/manga/tag", {
+        // Use the API route instead of direct MangaDex API call
+        // This avoids CORS issues and works better in production
+        const response = await fetch("/api/manga/tag", {
           cache: "force-cache",
         });
         if (!response.ok) {

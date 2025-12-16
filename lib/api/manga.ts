@@ -15,6 +15,7 @@ import type {
 const PLACEHOLDER_IMAGE =
   "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
 const MANGA_DEX_COVERS_BASE = "https://uploads.mangadex.org/covers";
+const MANGA_DEX_API = "https://api.mangadex.org";
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 const DEFAULT_CONTENT_RATINGS = ["safe", "suggestive"];
@@ -32,20 +33,9 @@ async function getCoverArtUrl(
 ): Promise<string> {
   if (!coverArtId) return PLACEHOLDER_IMAGE;
 
-  try {
-    const response = await fetch(`/api/cover/${coverArtId}`, {
-      cache: "force-cache",
-    });
-    if (!response.ok) return PLACEHOLDER_IMAGE;
-
-    const data = await response.json();
-    const fileName = data.data?.attributes?.fileName;
-    if (!fileName) return PLACEHOLDER_IMAGE;
-
-    return `${MANGA_DEX_COVERS_BASE}/${mangaId}/${fileName}.512.jpg`;
-  } catch {
-    return PLACEHOLDER_IMAGE;
-  }
+  // Use our proxy API route to serve images (bypasses CORS issues)
+  // This works in both local and production environments
+  return `/api/cover-image/${mangaId}/${coverArtId}`;
 }
 
 async function fetchMangaStatistics(
