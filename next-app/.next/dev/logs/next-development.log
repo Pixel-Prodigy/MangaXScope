@@ -1,0 +1,5 @@
+[00:24:33.836] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/guru/Documents/coding/personal/mangahook-api/next-app/.next/dev/server/app/_not-found/page/build-manifest.json'
+[00:24:33.837] Server  LOG      ✓ Compiled in 120ms
+[00:24:33.841] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/home/guru/Documents/coding/personal/mangahook-api/next-app/app'
+[00:24:33.842] Server  ERROR    ⨯ "unhandledRejection:" Error: ENOENT: no such file or directory, scandir '/home/guru/Documents/coding/personal/mangahook-api/next-app/app'
+[00:24:33.844] Server  ERROR    ⨯ "unhandledRejection: " Error: ENOENT: no such file or directory, scandir '/home/guru/Documents/coding/personal/mangahook-api/next-app/app'
