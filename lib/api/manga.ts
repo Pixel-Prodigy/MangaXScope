@@ -14,8 +14,6 @@ import type {
 
 const PLACEHOLDER_IMAGE =
   "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
-const MANGA_DEX_COVERS_BASE = "https://uploads.mangadex.org/covers";
-const MANGA_DEX_API = "https://api.mangadex.org";
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 const DEFAULT_CONTENT_RATINGS = ["safe", "suggestive"];
@@ -327,7 +325,7 @@ export async function getMangaList(
     const mangaIds = mangaDexResponse.data.map((manga) => manga.id);
     const statistics = await fetchMangaStatistics(mangaIds);
 
-    let batchManga = await Promise.all(
+    const batchManga = await Promise.all(
       mangaDexResponse.data.map((manga) =>
         transformMangaDexManga(manga, statistics)
       )
@@ -482,9 +480,6 @@ export async function searchManga(
   };
 }
 
-export async function getChapter(
-  _mangaId: string,
-  _chapterId: string
-): Promise<ChapterData> {
+export async function getChapter(): Promise<ChapterData> {
   throw new Error("Chapter fetching not yet implemented with MangaDex API");
 }

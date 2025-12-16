@@ -231,7 +231,7 @@ export default function Home() {
 
   // Optimized prefetch handler with priority-based prefetching
   const handlePrefetchPage = useCallback(
-    (page: number, priority: "high" | "low" = "low") => {
+    (page: number) => {
       if (!metadata || page < 1 || page > metadata.totalPages) return;
 
       const pageQueryKey = buildQueryKeyForPage(page);
@@ -240,8 +240,7 @@ export default function Home() {
       // Skip if already cached and fresh
       if (existingData) return;
 
-      // High priority: immediate prefetch (for adjacent pages)
-      // Low priority: background prefetch (for further pages)
+      // Prefetch the page data
       queryClient.prefetchQuery({
         queryKey: pageQueryKey,
         queryFn: () => fetchMangaData(page),
@@ -286,14 +285,14 @@ export default function Home() {
 
     // Immediate prefetch for high priority
     highPriority.forEach(({ page }) => {
-      handlePrefetchPage(page, "high");
+      handlePrefetchPage(page);
     });
 
     // Deferred prefetch for low priority (non-blocking)
     if (lowPriority.length > 0) {
       const timeoutId = setTimeout(() => {
         lowPriority.forEach(({ page }) => {
-          handlePrefetchPage(page, "low");
+          handlePrefetchPage(page);
         });
       }, 100);
 
@@ -317,7 +316,7 @@ export default function Home() {
           for (let i = 1; i <= 2; i++) {
             const nextPage = currentPage + i;
             if (nextPage <= totalPages) {
-              handlePrefetchPage(nextPage, "high");
+              handlePrefetchPage(nextPage);
             }
           }
         }
