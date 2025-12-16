@@ -6,41 +6,32 @@ import { Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQueryStates, parseAsString } from "nuqs";
 
-const DEBOUNCE_DELAY = 500; // milliseconds
+const DEBOUNCE_DELAY = 500;
 
 export function SearchBar() {
   const [search, setSearch] = useQueryStates(
-    {
-      q: parseAsString.withDefault(""),
-    },
-    {
-      shallow: false,
-    }
+    { q: parseAsString.withDefault("") },
+    { shallow: false }
   );
 
   const [localValue, setLocalValue] = useState(search.q || "");
   const [isDebouncing, setIsDebouncing] = useState(false);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Sync local value with URL param when it changes externally
   useEffect(() => {
     setLocalValue(search.q || "");
   }, [search.q]);
 
-  // Debounced search update
   const debouncedSetSearch = useCallback(
     (value: string) => {
-      // Clear existing timer
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
 
-      // Show debouncing indicator if there's a value
       if (value.trim()) {
         setIsDebouncing(true);
       }
 
-      // Set new timer
       debounceTimerRef.current = setTimeout(() => {
         setIsDebouncing(false);
         setSearch({ q: value.trim() || null });
@@ -54,7 +45,6 @@ export function SearchBar() {
     debouncedSetSearch(value);
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current) {
