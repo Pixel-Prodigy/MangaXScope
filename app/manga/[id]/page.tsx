@@ -91,9 +91,9 @@ export default function MangaDetailPage() {
 
         {/* Hero Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           className="mb-6 sm:mb-8 grid gap-4 sm:gap-6 md:grid-cols-[300px_1fr]"
         >
           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border-2 shadow-lg">
@@ -223,9 +223,9 @@ export default function MangaDetailPage() {
 
         {manga.tags.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <Card>
               <CardHeader>

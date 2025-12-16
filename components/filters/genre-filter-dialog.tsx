@@ -226,7 +226,7 @@ export function GenreFilterDialog() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="relative flex-1 min-w-0 h-9 min-h-[44px] sm:min-h-[36px]"
+          className="relative flex-1 min-w-0 min-h-[44px] sm:min-h-[36px]"
         >
           <div className="relative mr-1.5 sm:mr-2 h-4 w-4 shrink-0 overflow-hidden rounded-full">
             <span className="flex items-center justify-center h-full w-full">
