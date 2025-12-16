@@ -24,7 +24,6 @@ export interface MangaGridProps {
   };
 }
 
-const DEFAULT_SKELETON_COUNT = 18;
 const DEFAULT_EMPTY_MESSAGE = {
   title: "No mangas found",
   description: "Try adjusting your filters or search query",
