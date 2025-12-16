@@ -24,22 +24,12 @@ export interface MangaGridProps {
   };
 }
 
-/**
- * Default skeleton count for loading state
- */
 const DEFAULT_SKELETON_COUNT = 18;
-
-/**
- * Default empty state messages
- */
 const DEFAULT_EMPTY_MESSAGE = {
   title: "No mangas found",
   description: "Try adjusting your filters or search query",
 } as const;
 
-/**
- * MangaSkeleton - Loading skeleton component for manga cards
- */
 const MangaSkeletonComponent = function MangaSkeleton() {
   return (
     <div className="space-y-3" aria-label="Loading manga card">
@@ -61,9 +51,6 @@ const MangaSkeletonComponent = function MangaSkeleton() {
 const MangaSkeleton = memo(MangaSkeletonComponent);
 MangaSkeleton.displayName = "MangaSkeleton";
 
-/**
- * EmptyState - Component displayed when no mangas are found
- */
 const EmptyStateComponent = function EmptyState({
   title,
   description,
@@ -90,26 +77,6 @@ const EmptyStateComponent = function EmptyState({
 const EmptyState = memo(EmptyStateComponent);
 EmptyState.displayName = "EmptyState";
 
-/**
- * MangaGrid - A reusable, optimized grid component for displaying manga cards
- *
- * Features:
- * - Memoized for performance optimization
- * - Responsive grid layout
- * - Loading skeleton states
- * - Empty state handling
- * - Fully accessible
- * - SEO-friendly with proper semantic HTML
- *
- * @example
- * ```tsx
- * <MangaGrid
- *   mangas={mangaList}
- *   isLoading={isLoading}
- *   onCardClick={(id) => console.log('Clicked:', id)}
- * />
- * ```
- */
 const MangaGridComponent = function MangaGrid({
   mangas,
   isLoading = false,
@@ -118,13 +85,11 @@ const MangaGridComponent = function MangaGrid({
   onCardClick,
   emptyMessage = DEFAULT_EMPTY_MESSAGE,
 }: MangaGridProps) {
-  // Memoize skeleton array to prevent unnecessary re-renders
   const skeletonItems = useMemo(
     () => Array.from({ length: skeletonCount }, (_, i) => i),
     [skeletonCount]
   );
 
-  // Loading state
   if (isLoading) {
     return (
       <div
@@ -138,7 +103,6 @@ const MangaGridComponent = function MangaGrid({
     );
   }
 
-  // Empty state
   if (mangas.length === 0) {
     return (
       <EmptyState
@@ -150,7 +114,6 @@ const MangaGridComponent = function MangaGrid({
     );
   }
 
-  // Grid with manga cards
   return (
     <section
       className={cn(
