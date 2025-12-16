@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { ThemeProvider } from "@/components/theme-provider";
+import { PWARegister } from "@/components/pwa-register";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,22 +16,93 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MangaHook - Discover Your Next Manga",
-  description: "Browse and discover manga with advanced filtering and search",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://mangahook.app"
+  ),
+  title: {
+    default: "MangaHook - Discover Your Next Manga",
+    template: "%s | MangaHook",
+  },
+  description:
+    "Browse and discover manga with advanced filtering and search. Find your next favorite manga with powerful search tools, genre filters, and detailed information.",
+  keywords: [
+    "manga",
+    "comics",
+    "manga reader",
+    "manga browser",
+    "manga search",
+    "manga discovery",
+    "anime",
+    "manga library",
+  ],
+  authors: [{ name: "MangaHook" }],
+  creator: "MangaHook",
+  publisher: "MangaHook",
   manifest: "/manifest.json",
   viewport: {
     width: "device-width",
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+    maximumScale: 5,
+    userScalable: true,
+    viewportFit: "cover",
   },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#e5e5e5" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },
+  ],
+  colorScheme: "dark light",
   icons: {
-    icon: "/hat.png",
-    apple: "/hat.png",
+    icon: [
+      { url: "/hat.png", sizes: "any" },
+      { url: "/hat.png", sizes: "192x192", type: "image/png" },
+      { url: "/hat.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/hat.png", sizes: "180x180", type: "image/png" },
+      { url: "/hat.png", sizes: "192x192", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/hat.png",
+      },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "MangaHook",
   },
   openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "MangaHook",
     title: "MangaHook - Discover Your Next Manga",
-    description: "Browse and discover manga with advanced filtering and search",
+    description:
+      "Browse and discover manga with advanced filtering and search. Find your next favorite manga with powerful search tools, genre filters, and detailed information.",
+    images: [
+      {
+        url: "/manga-logo.webp",
+        width: 1200,
+        height: 630,
+        alt: "MangaHook - Discover Your Next Manga",
+        type: "image/webp",
+      },
+      {
+        url: "/manga-logo.webp",
+        width: 800,
+        height: 600,
+        alt: "MangaHook Logo",
+        type: "image/webp",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MangaHook - Discover Your Next Manga",
+    description:
+      "Browse and discover manga with advanced filtering and search. Find your next favorite manga with powerful search tools.",
     images: [
       {
         url: "/manga-logo.webp",
@@ -39,13 +111,27 @@ export const metadata: Metadata = {
         alt: "MangaHook Logo",
       },
     ],
-    type: "website",
+    creator: "@mangahook",
+    site: "@mangahook",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "MangaHook - Discover Your Next Manga",
-    description: "Browse and discover manga with advanced filtering and search",
-    images: ["/manga-logo.webp"],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    // Add your verification codes here when available
+    // google: "your-google-verification-code",
+    // yandex: "your-yandex-verification-code",
   },
 };
 
@@ -60,7 +146,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider defaultTheme="dark" storageKey="manga-ui-theme">
-          <Providers>{children}</Providers>
+          <Providers>
+            <PWARegister />
+            {children}
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

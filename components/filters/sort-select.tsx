@@ -24,10 +24,10 @@ export function SortSelect() {
       value={sort.type}
       onValueChange={(value) => setSort({ type: value })}
     >
-      <SelectTrigger className="w-full flex-1 min-w-0">
+      <SelectTrigger className="w-full flex-1 min-w-0 min-h-[44px] sm:min-h-[48px] rounded-xl">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="rounded-xl">
         <SelectItem value="latest">Latest</SelectItem>
         <SelectItem value="popular">Popular</SelectItem>
       </SelectContent>

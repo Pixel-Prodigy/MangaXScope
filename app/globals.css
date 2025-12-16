@@ -157,14 +157,16 @@
   }
   html {
     overflow-y: auto;
-    scroll-behavior: smooth;
+    /* Let JavaScript control scroll behavior for better control */
+    scroll-behavior: auto;
   }
 
   body {
     @apply bg-background text-foreground;
     @apply transition-colors duration-300;
     overflow-x: hidden;
-    position: relative;
+    /* Remove position relative to prevent scroll issues */
+    position: static;
   }
 
   .manga body {

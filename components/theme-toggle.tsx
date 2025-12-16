@@ -25,24 +25,24 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
+        <Button variant="outline" size="icon" className="relative min-h-[44px] min-w-[44px] rounded-xl">
           <Icon className="h-4 w-4 transition-all" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="rounded-xl">
         {themes.map((themeOption) => {
           const ThemeIcon = themeOption.icon;
           return (
             <DropdownMenuItem
               key={themeOption.value}
               onClick={() => setTheme(themeOption.value)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2.5 min-h-[44px] rounded-lg"
             >
               <ThemeIcon className="h-4 w-4" />
               <span>{themeOption.label}</span>
               {theme === themeOption.value && (
-                <span className="ml-auto text-primary">✓</span>
+                <span className="ml-auto text-primary font-semibold">✓</span>
               )}
             </DropdownMenuItem>
           );

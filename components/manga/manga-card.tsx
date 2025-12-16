@@ -72,15 +72,15 @@ const MangaCardComponent = function MangaCard({
     >
       <Link
         href={mangaUrl}
-        className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-xl"
+        className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl active:scale-[0.98] transition-transform"
         onClick={handleCardClick}
         onKeyDown={handleKeyDown}
         aria-label={`View ${manga.title} manga details`}
         aria-describedby={`manga-${manga.id}-description`}
         itemProp="url"
       >
-        <div className="group relative h-full overflow-hidden rounded-xl bg-card border border-border shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/10 focus-within:ring-2 focus-within:ring-primary">
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-t-xl bg-gradient-to-br from-muted via-muted/50 to-muted">
+        <div className="group relative h-full overflow-hidden rounded-2xl bg-card border border-border/60 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 focus-within:ring-2 focus-within:ring-primary/50 focus-within:ring-offset-2">
+          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-t-2xl bg-gradient-to-br from-muted via-muted/50 to-muted">
             <img
               src={imageUrl}
               alt={`${manga.title} cover image`}
@@ -107,10 +107,10 @@ const MangaCardComponent = function MangaCard({
               aria-hidden="true"
             />
 
-            <div className="absolute top-2 right-2 z-10" aria-hidden="true">
+            <div className="absolute top-2.5 right-2.5 z-10" aria-hidden="true">
               <Badge
                 className={cn(
-                  "border-0 text-[10px] font-semibold text-white backdrop-blur-md shadow-lg sm:text-xs",
+                  "border-0 text-[10px] font-semibold text-white backdrop-blur-md shadow-lg px-2 py-0.5 sm:text-xs sm:px-2.5",
                   statusColor
                 )}
                 aria-label={`Status: ${statusLabel}`}
@@ -120,7 +120,7 @@ const MangaCardComponent = function MangaCard({
             </div>
 
             <div
-              className="absolute bottom-0 left-0 right-0 translate-y-full bg-linear-to-t from-black/85 via-black/60 to-transparent p-3 transition-transform duration-300 group-hover:translate-y-0 "
+              className="absolute bottom-0 left-0 right-0 translate-y-full bg-gradient-to-t from-black/90 via-black/70 to-transparent p-3 sm:p-4 transition-transform duration-300 group-hover:translate-y-0"
               aria-hidden="true"
             >
               {manga.description ? (
@@ -135,9 +135,9 @@ const MangaCardComponent = function MangaCard({
             </div>
           </div>
 
-          <div className="relative bg-card p-3 sm:p-4 rounded-b-xl">
+          <div className="relative bg-card p-3.5 sm:p-4 rounded-b-2xl">
             <h3
-              className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-sm"
+              className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-sm mb-1.5"
               itemProp="name"
             >
               {manga.title}
@@ -149,7 +149,7 @@ const MangaCardComponent = function MangaCard({
             >
               {manga.description || `Manga titled ${manga.title}`}
             </div>
-            <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-muted-foreground sm:text-xs">
+            <div className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground sm:text-xs">
               <BookOpen className="h-3 w-3 shrink-0" aria-hidden="true" />
               <span className="truncate" aria-label="Chapters">
                 {manga.totalChapters !== null &&

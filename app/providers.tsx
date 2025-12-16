@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -17,6 +17,21 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       })
   );
+
+  // Prevent scroll restoration issues
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Disable automatic scroll restoration
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      
+      // Ensure initial scroll position is at top
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  }, []);
 
   return (
     <NuqsAdapter>

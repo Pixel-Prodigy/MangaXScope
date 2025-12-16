@@ -74,15 +74,15 @@ export function SearchBar() {
 
   return (
     <div className="relative w-full">
-      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors" />
+      <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors sm:left-4" />
       <Input
         type="text"
         placeholder="Search for manga..."
         value={localValue}
         onChange={(e) => handleSearch(e.target.value)}
-        className="w-full pl-10 pr-10 transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+        className="w-full pl-10 pr-12 sm:pl-11 sm:pr-14 h-11 sm:h-12 text-base rounded-xl border-border/60 transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
       />
-      <div className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center gap-1">
+      <div className="absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-1.5 sm:right-2">
         {isDebouncing && localValue && (
           <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
         )}
@@ -90,9 +90,10 @@ export function SearchBar() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive"
+            className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg hover:bg-destructive/10 hover:text-destructive active:bg-destructive/20 transition-colors"
             onClick={clearSearch}
             type="button"
+            aria-label="Clear search"
           >
             <X className="h-4 w-4" />
           </Button>

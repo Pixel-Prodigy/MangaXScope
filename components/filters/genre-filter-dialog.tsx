@@ -222,15 +222,15 @@ export function GenreFilterDialog() {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="relative flex-1 min-w-0">
+        <Button variant="outline" className="relative flex-1 min-w-0 min-h-[44px] sm:min-h-[48px] rounded-xl">
           <div className="relative mr-1.5 sm:mr-2 h-4 w-4 shrink-0 overflow-hidden rounded-full">
             <span className="flex items-center justify-center h-full w-full">
               <BookOpenIcon className="h-4 w-4 text-muted-foreground" />
             </span>
           </div>
-          <span className="truncate">Genres</span>
+          <span className="truncate text-sm sm:text-base">Genres</span>
           {activeCount > 0 && (
-            <span className="ml-1.5 sm:ml-2 rounded-full bg-primary px-1.5 sm:px-2 py-0.5 text-xs text-primary-foreground shrink-0">
+            <span className="ml-1.5 sm:ml-2 rounded-full bg-primary px-2 sm:px-2.5 py-0.5 text-xs font-semibold text-primary-foreground shrink-0">
               {activeCount}
             </span>
           )}

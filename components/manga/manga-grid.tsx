@@ -32,16 +32,16 @@ const DEFAULT_EMPTY_MESSAGE = {
 const MangaSkeletonComponent = function MangaSkeleton() {
   return (
     <div className="space-y-3" aria-label="Loading manga card">
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-muted via-muted/50 to-muted">
-        <Skeleton className="h-full w-full rounded-xl" />
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-muted via-muted/50 to-muted">
+        <Skeleton className="h-full w-full rounded-2xl" />
         <div
           className="absolute inset-0 animate-pulse bg-gradient-to-br from-transparent via-white/5 to-transparent"
           aria-hidden="true"
         />
       </div>
       <div className="space-y-2 px-1">
-        <Skeleton className="h-4 w-full rounded" />
-        <Skeleton className="h-3 w-2/3 rounded" />
+        <Skeleton className="h-4 w-full rounded-md" />
+        <Skeleton className="h-3 w-2/3 rounded-md" />
       </div>
     </div>
   );
@@ -110,7 +110,7 @@ const MangaGridComponent = function MangaGrid({
   return (
     <section
       className={cn(
-        "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6",
+        "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7",
         className
       )}
       aria-label="Manga collection"

@@ -40,10 +40,28 @@ export default function MangaDetailPage() {
 
   // Reset scroll position when navigating to this page
   useEffect(() => {
-    // Use requestAnimationFrame to ensure DOM is ready
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, behavior: "instant" });
-    });
+    // Reset scroll immediately
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
+      // Use requestAnimationFrame to ensure DOM is ready and prevent any scroll jumps
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      });
+      
+      // Double-check after a short delay to catch any late scroll events
+      const timeoutId = setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 50);
+      
+      return () => clearTimeout(timeoutId);
+    }
   }, [mangaId]);
 
   if (isLoading) {
@@ -83,11 +101,12 @@ export default function MangaDetailPage() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto min-h-screen px-4 py-8">
+      <div className="container mx-auto min-h-screen px-4 py-6 sm:px-6 sm:py-8">
         <Link href="/">
-          <Button variant="ghost" className="mb-6">
+          <Button variant="ghost" className="mb-6 min-h-[44px] px-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            <span className="hidden sm:inline">Back to Home</span>
+            <span className="sm:hidden">Back</span>
           </Button>
         </Link>
 
@@ -96,9 +115,9 @@ export default function MangaDetailPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="mb-8 grid gap-6 md:grid-cols-[300px_1fr]"
+          className="mb-8 grid gap-6 sm:gap-8 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr]"
         >
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border-2 shadow-lg">
+          <div className="relative aspect-[3/4] w-full max-w-[320px] mx-auto md:mx-0 overflow-hidden rounded-2xl border-2 border-border/60 shadow-xl">
             <img
               src={imageUrl}
               alt={manga.name}
@@ -110,17 +129,17 @@ export default function MangaDetailPage() {
             />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-5 sm:space-y-6">
             <div>
-              <h1 className="mb-2 text-3xl font-bold tracking-tight md:text-4xl">
+              <h1 className="mb-2.5 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl leading-tight">
                 {manga.name}
               </h1>
               {manga.altTitles && manga.altTitles.length > 0 && (
-                <p className="mb-3 text-sm text-muted-foreground">
+                <p className="mb-4 text-sm text-muted-foreground leading-relaxed">
                   {manga.altTitles.slice(0, 2).join(" • ")}
                 </p>
               )}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 sm:gap-2.5">
                 {manga.genres.map((genre) => (
                   <Badge key={genre} variant="secondary">
                     {genre}
@@ -137,80 +156,81 @@ export default function MangaDetailPage() {
               </div>
             </div>
 
-            <Separator />
+            <Separator className="my-5 sm:my-6" />
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex items-center gap-2 text-sm">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Author:</span>
-                <span className="font-medium">{manga.author || "Unknown"}</span>
+            <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-2.5 text-sm">
+                <User className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-muted-foreground shrink-0">Author:</span>
+                <span className="font-medium truncate">{manga.author || "Unknown"}</span>
               </div>
               {manga.artist && manga.artist !== manga.author && (
-                <div className="flex items-center gap-2 text-sm">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Artist:</span>
-                  <span className="font-medium">{manga.artist}</span>
+                <div className="flex items-center gap-2.5 text-sm">
+                  <User className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-muted-foreground shrink-0">Artist:</span>
+                  <span className="font-medium truncate">{manga.artist}</span>
                 </div>
               )}
-              <div className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Status:</span>
-                <span className="font-medium">{manga.status}</span>
+              <div className="flex items-center gap-2.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-muted-foreground shrink-0">Status:</span>
+                <span className="font-medium truncate">{manga.status}</span>
               </div>
               {manga.year && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Year:</span>
+                <div className="flex items-center gap-2.5 text-sm">
+                  <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-muted-foreground shrink-0">Year:</span>
                   <span className="font-medium">{manga.year}</span>
                 </div>
               )}
               {manga.publicationDemographic && (
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-muted-foreground">Demographic:</span>
-                  <span className="font-medium capitalize">
+                <div className="flex items-center gap-2.5 text-sm">
+                  <span className="text-muted-foreground shrink-0">Demographic:</span>
+                  <span className="font-medium capitalize truncate">
                     {manga.publicationDemographic}
                   </span>
                 </div>
               )}
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Content Rating:</span>
+              <div className="flex items-center gap-2.5 text-sm">
+                <span className="text-muted-foreground shrink-0">Content Rating:</span>
                 <Badge
                   variant={
                     manga.contentRating === "safe" ? "secondary" : "destructive"
                   }
+                  className="shrink-0"
                 >
                   {manga.contentRating}
                 </Badge>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Updated:</span>
-                <span className="font-medium">{manga.updated}</span>
+              <div className="flex items-center gap-2.5 text-sm">
+                <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-muted-foreground shrink-0">Updated:</span>
+                <span className="font-medium truncate">{manga.updated}</span>
               </div>
             </div>
 
-            <Separator />
+            <Separator className="my-5 sm:my-6" />
 
             {manga.description && (
               <div>
-                <h2 className="mb-2 text-lg font-semibold">Description</h2>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <h2 className="mb-3 text-lg font-semibold sm:text-xl">Description</h2>
+                <p className="text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-relaxed">
                   {manga.description}
                 </p>
               </div>
             )}
 
             {manga.lastChapter && (
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all"
+                  className="w-full sm:w-auto min-h-[44px] shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all rounded-xl"
                   disabled
                 >
                   <Play className="mr-2 h-4 w-4" />
                   Read Manga
                 </Button>
-                <p className="text-xs text-muted-foreground self-center sm:self-end">
+                <p className="text-xs text-muted-foreground text-center sm:text-left sm:self-center">
                   Chapter support coming soon
                 </p>
               </div>
@@ -218,7 +238,7 @@ export default function MangaDetailPage() {
 
             <OpenInAniyomiButton
               mangaId={manga.id}
-              className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all"
+              className="w-full sm:w-auto min-h-[44px] shadow-md hover:shadow-lg transition-all rounded-xl"
             />
           </div>
         </motion.div>
@@ -228,20 +248,22 @@ export default function MangaDetailPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.1 }}
+            className="mt-8"
           >
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="rounded-2xl border-border/60 shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                   <BookOpen className="h-5 w-5" />
                   Tags & Genres
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 sm:gap-2.5">
                   {manga.tags.map((tag) => (
                     <Badge
                       key={tag.id}
                       variant={tag.group === "genre" ? "default" : "outline"}
+                      className="px-2.5 py-1"
                     >
                       {tag.name}
                     </Badge>

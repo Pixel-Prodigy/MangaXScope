@@ -330,21 +330,26 @@ export default function Home() {
 
   // Scroll to top when page changes (only for pagination, not initial load)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 100);
-    return () => clearTimeout(timer);
+    // Only scroll if page actually changed (not on initial mount)
+    const hasPageChanged = searchParams.page !== 1;
+    
+    if (hasPageChanged) {
+      // Use instant scroll for better performance and to avoid glitches
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
   }, [searchParams.page]);
 
   return (
     <>
       <Navbar />
-      <div className="container mx-auto min-h-screen px-4 py-6">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="container mx-auto min-h-screen px-4 py-6 sm:px-6 sm:py-8">
+        <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="flex-1 min-w-0">
             <SearchBar />
           </div>
-          <div className="flex gap-2   min-w-0">
+          <div className="flex gap-2 sm:gap-3 min-w-0">
             <SortSelect />
             <GeneralFilterDialog />
             <GenreFilterDialog />
@@ -352,9 +357,9 @@ export default function Home() {
         </div>
 
         {error && (
-          <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-center text-destructive">
-            <p className="font-medium">Error loading mangas</p>
-            <p className="text-sm">
+          <div className="rounded-xl border border-destructive/50 bg-destructive/10 p-6 text-center text-destructive mb-6">
+            <p className="font-semibold mb-1.5">Error loading mangas</p>
+            <p className="text-sm text-destructive/80">
               {error instanceof Error ? error.message : "Unknown error"}
             </p>
           </div>
@@ -365,7 +370,7 @@ export default function Home() {
         {!isLoading && data?.metaData && (
           <div
             ref={paginationRef}
-            className="mt-8 flex items-center justify-center gap-2 sm:gap-4"
+            className="mt-8 sm:mt-10 flex items-center justify-center gap-2 sm:gap-4"
           >
             <Button
               variant="outline"
@@ -382,13 +387,13 @@ export default function Home() {
               disabled={
                 searchParams.page === 1 || data.metaData.totalPages <= 1
               }
-              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] text-xs sm:text-sm"
+              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] min-h-[44px] text-xs sm:text-sm rounded-xl"
             >
               <ChevronLeft className="h-4 w-4" />
               <span className="hidden sm:inline">Previous</span>
               <span className="sm:hidden">Prev</span>
             </Button>
-            <div className="flex items-center gap-1 sm:gap-2 rounded-lg border bg-card px-3 sm:px-6 py-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-border/60 bg-card px-4 sm:px-6 py-2.5 shadow-sm">
               <span className="text-xs sm:text-sm font-medium text-muted-foreground hidden sm:inline">
                 Page
               </span>
@@ -418,7 +423,7 @@ export default function Home() {
                 searchParams.page >= data.metaData.totalPages ||
                 data.metaData.totalPages <= 1
               }
-              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] text-xs sm:text-sm"
+              className="gap-1 sm:gap-2 min-w-[80px] sm:min-w-[120px] min-h-[44px] text-xs sm:text-sm rounded-xl"
             >
               <span className="hidden sm:inline">Next</span>
               <span className="sm:hidden">Next</span>

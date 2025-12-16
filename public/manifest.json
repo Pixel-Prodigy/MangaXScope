@@ -1,28 +1,45 @@
 {
   "name": "MangaHook - Discover Your Next Manga",
   "short_name": "MangaHook",
-  "description": "Browse and discover manga with advanced filtering and search",
+  "description": "Browse and discover manga with advanced filtering and search. Find your next favorite manga with powerful search and filter tools.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "orientation": "portrait-primary",
+  "background_color": "#1a1a1a",
+  "theme_color": "#e5e5e5",
+  "orientation": "any",
+  "categories": ["entertainment", "books", "comics"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/hat.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/hat.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/hat.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/hat.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
     {
+<<<<<<< HEAD
       "name": "Search Manga",
       "short_name": "Search",
       "description": "Search for manga",
@@ -31,6 +48,30 @@
         {
           "src": "/icon.webp",
           "sizes": "192x192"
+=======
+      "name": "Browse Latest",
+      "short_name": "Latest",
+      "description": "Browse the latest manga",
+      "url": "/?type=latest",
+      "icons": [
+        {
+          "src": "/hat.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Browse Popular",
+      "short_name": "Popular",
+      "description": "Browse popular manga",
+      "url": "/?type=popular",
+      "icons": [
+        {
+          "src": "/hat.png",
+          "sizes": "192x192",
+          "type": "image/png"
+>>>>>>> 5460917 (manga)
         }
       ]
     }

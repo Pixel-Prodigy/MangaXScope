@@ -36,10 +36,13 @@ A modern, beautiful manga browsing application built with Next.js 16, TypeScript
    ```
 
 4. **Configure environment variables:**
-   Edit `.env.local` and set your backend API URL:
+   Edit `.env.local` and set your backend API URL and site URL:
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:3000
+   NEXT_PUBLIC_SITE_URL=http://localhost:3001
    ```
+   
+   > **Note**: `NEXT_PUBLIC_SITE_URL` is used for social sharing metadata (WhatsApp, Twitter, etc.). Set it to your production domain when deploying.
 
 ## 🎯 Running the Application
 
@@ -126,17 +129,23 @@ If you need to change the port, you can:
    PORT=3001 pnpm dev
    ```
 
-### API URL Configuration
+### Environment Variables
 
-Update `NEXT_PUBLIC_API_URL` in `.env.local` to point to your backend:
+Update `.env.local` with your configuration:
 
 ```env
 # Local development
 NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:3001
 
 # Production
 NEXT_PUBLIC_API_URL=https://your-api-domain.com
+NEXT_PUBLIC_SITE_URL=https://your-frontend-domain.com
 ```
+
+**Important**: 
+- `NEXT_PUBLIC_API_URL` - Points to your backend API
+- `NEXT_PUBLIC_SITE_URL` - Used for social sharing metadata (WhatsApp, Twitter, etc.). Must be your full production URL when deployed.
 
 ## 🎯 Available Scripts
 
@@ -144,6 +153,39 @@ NEXT_PUBLIC_API_URL=https://your-api-domain.com
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
 - `pnpm lint` - Run ESLint
+
+## 📱 PWA (Progressive Web App)
+
+The application is configured as a PWA and can be installed on mobile devices:
+
+### Features
+- **Installable**: Add to home screen on iOS and Android
+- **Offline Support**: Service worker caches assets and API responses
+- **App-like Experience**: Standalone display mode when installed
+
+### Installation
+1. **On Mobile (iOS/Android)**:
+   - Visit the site in Safari (iOS) or Chrome (Android)
+   - Tap the share button
+   - Select "Add to Home Screen" or "Install App"
+
+2. **On Desktop (Chrome/Edge)**:
+   - Look for the install icon in the address bar
+   - Click to install the app
+
+### Configuration
+- Manifest: `/public/manifest.json`
+- Service Worker: `/public/sw.js`
+- Icons: Ensure `/public/hat.png` is 512x512px for best results
+
+### Social Sharing
+The app includes optimized metadata for sharing on:
+- **WhatsApp**: Uses Open Graph tags
+- **Twitter**: Twitter Card support
+- **Facebook**: Open Graph metadata
+- **Other platforms**: Standard meta tags
+
+Make sure to set `NEXT_PUBLIC_SITE_URL` in your environment variables for proper social sharing links.
 
 ## 🚀 Deployment
 
@@ -153,7 +195,9 @@ The application can be deployed to:
 - **Netlify**
 - **Any Node.js hosting**
 
-Make sure to set the `NEXT_PUBLIC_API_URL` environment variable in your deployment platform.
+Make sure to set these environment variables in your deployment platform:
+- `NEXT_PUBLIC_API_URL` - Your backend API URL
+- `NEXT_PUBLIC_SITE_URL` - Your frontend URL (for social sharing)
 
 ## 📝 Notes
 
