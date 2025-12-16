@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   BookOpen,
   User,
@@ -23,10 +22,13 @@ import {
 import { Navbar } from "@/components/navbar";
 import { isAndroid } from "@/lib/utils";
 
+const PLACEHOLDER_IMAGE =
+  "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
+
 export default function MangaDetailPage() {
   const params = useParams();
   const mangaId = params.id as string;
-  const [isAndroidDevice, setIsAndroidDevice] = React.useState(false);
+  const [isAndroidDevice, setIsAndroidDevice] = useState(false);
 
   const {
     data: manga,
@@ -38,7 +40,7 @@ export default function MangaDetailPage() {
     enabled: !!mangaId,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setIsAndroidDevice(isAndroid());
   }, []);
 
@@ -74,6 +76,8 @@ export default function MangaDetailPage() {
     );
   }
 
+  const imageUrl = manga.imageUrl || PLACEHOLDER_IMAGE;
+
   return (
     <>
       <Navbar />
@@ -93,19 +97,13 @@ export default function MangaDetailPage() {
           className="mb-8 grid gap-6 md:grid-cols-[300px_1fr]"
         >
           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border-2 shadow-lg">
-            {/* Use regular img tag for MangaDex images to avoid Next.js optimization issues */}
             <img
-              src={
-                manga.imageUrl ||
-                "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover"
-              }
+              src={imageUrl}
               alt={manga.name}
               className="h-full w-full object-cover"
               loading="eager"
               onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src =
-                  "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
+                (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE;
               }}
             />
           </div>
@@ -236,7 +234,6 @@ export default function MangaDetailPage() {
           </div>
         </motion.div>
 
-        {/* Tags Section */}
         {manga.tags.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}

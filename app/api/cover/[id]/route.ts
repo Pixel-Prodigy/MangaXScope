@@ -8,13 +8,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    
-    // Fetch cover art from MangaDex API
     const response = await fetch(`${MANGA_DEX_API}/cover/${id}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       cache: "force-cache",
     });
 
@@ -25,14 +21,10 @@ export async function GET(
       );
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(await response.json());
   } catch (error) {
     console.error("Error fetching cover art:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 

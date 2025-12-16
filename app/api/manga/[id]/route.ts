@@ -9,21 +9,14 @@ export async function GET(
   try {
     const { id } = await params;
     const searchParams = request.nextUrl.searchParams;
-    
-    // Build the MangaDex API URL
     const mangaDexUrl = new URL(`${MANGA_DEX_API}/manga/${id}`);
-    
-    // Copy all query parameters to the MangaDex API URL
     searchParams.forEach((value, key) => {
       mangaDexUrl.searchParams.append(key, value);
     });
-    
-    // Fetch from MangaDex API
+
     const response = await fetch(mangaDexUrl.toString(), {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       cache: "no-store",
     });
 
@@ -36,14 +29,10 @@ export async function GET(
       );
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(await response.json());
   } catch (error) {
     console.error("Error fetching manga:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
