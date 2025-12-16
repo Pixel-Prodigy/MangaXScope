@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -17,10 +16,9 @@ import {
   ArrowLeft,
   Play,
   CheckCircle2,
-  ExternalLink,
 } from "lucide-react";
 import { Navbar } from "@/components/navbar";
-import { isAndroid } from "@/lib/utils";
+import { OpenInAniyomiButton } from "@/components/manga/open-in-aniyomi-button";
 
 const PLACEHOLDER_IMAGE =
   "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
@@ -28,7 +26,6 @@ const PLACEHOLDER_IMAGE =
 export default function MangaDetailPage() {
   const params = useParams();
   const mangaId = params.id as string;
-  const [isAndroidDevice] = useState(() => isAndroid());
 
   const {
     data: manga,
@@ -39,12 +36,6 @@ export default function MangaDetailPage() {
     queryFn: () => getManga(mangaId),
     enabled: !!mangaId,
   });
-
-  const handleOpenInAniyomi = () => {
-    if (manga?.id) {
-      window.open(`https://mangadex.org/title/${manga.id}`, "_blank");
-    }
-  };
 
   if (isLoading) {
     return (
@@ -210,23 +201,10 @@ export default function MangaDetailPage() {
               </div>
             )}
 
-            <div className="flex flex-col gap-2">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all"
-                onClick={handleOpenInAniyomi}
-                title="Requires Aniyomi + MangaDex extension installed"
-              >
-                <ExternalLink className="mr-2 h-4 w-4" />
-                Read this
-              </Button>
-              <p className="text-xs text-muted-foreground">
-                {isAndroidDevice
-                  ? "Requires Aniyomi + MangaDex extension installed"
-                  : "Opens MangaDex website (Aniyomi app required on Android)"}
-              </p>
-            </div>
+            <OpenInAniyomiButton
+              mangaId={manga.id}
+              className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all"
+            />
           </div>
         </motion.div>
 
