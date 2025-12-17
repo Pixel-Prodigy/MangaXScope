@@ -3,7 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useEffect } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getManga } from "@/lib/api/manga";
 import { Button } from "@/components/ui/button";
@@ -16,10 +17,21 @@ import {
   Calendar,
   ArrowLeft,
   CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import { Navbar } from "@/components/navbar";
-import { OpenInAniyomiButton } from "@/components/manga/open-in-aniyomi-button";
 import { ChapterList } from "@/components/manga/chapter-list";
+
+interface Chapter {
+  id: string;
+  chapter: string | null;
+  title: string | null;
+}
+
+interface ChapterListResponse {
+  chapters: Chapter[];
+  total: number;
+}
 
 const PLACEHOLDER_IMAGE =
   "https://placeholder.pics/svg/300x400/CCCCCC/FFFFFF/No%20Cover";
@@ -27,6 +39,7 @@ const PLACEHOLDER_IMAGE =
 export default function MangaDetailPage() {
   const params = useParams();
   const mangaId = params.id as string;
+  const [imageError, setImageError] = useState(false);
 
   const {
     data: manga,
@@ -37,6 +50,19 @@ export default function MangaDetailPage() {
     queryFn: () => getManga(mangaId),
     enabled: !!mangaId,
   });
+
+  // Fetch first chapter for Read button
+  const { data: chapterData, isLoading: isChapterLoading } = useQuery({
+    queryKey: ["first-chapter", mangaId],
+    queryFn: async (): Promise<ChapterListResponse> => {
+      const response = await fetch(`/api/reader/${mangaId}/chapters?limit=1&offset=0`);
+      if (!response.ok) throw new Error("Failed to fetch chapters");
+      return response.json();
+    },
+    enabled: !!mangaId && !!manga,
+  });
+
+  const firstChapter = chapterData?.chapters?.[0];
 
   // Reset scroll position when navigating to this page
   useEffect(() => {
@@ -69,7 +95,15 @@ export default function MangaDetailPage() {
       <>
         <Navbar />
         <div className="flex min-h-screen w-full items-center justify-center bg-background/80 backdrop-blur-xl">
-          <img src="/loading.gif" alt="Loading" className="w-56" />
+          <Image
+            src="/loading.gif"
+            alt="Loading"
+            width={224}
+            height={224}
+            className="w-56"
+            unoptimized
+            priority
+          />
         </div>
       </>
     );
@@ -96,7 +130,7 @@ export default function MangaDetailPage() {
     );
   }
 
-  const imageUrl = manga.imageUrl || PLACEHOLDER_IMAGE;
+  const imageUrl = imageError ? PLACEHOLDER_IMAGE : (manga.imageUrl || PLACEHOLDER_IMAGE);
 
   return (
     <>
@@ -115,21 +149,24 @@ export default function MangaDetailPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="mb-8 grid gap-6 sm:gap-8 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr]"
+          className="mb-8 grid gap-6 sm:gap-8 md:grid-cols-[260px_1fr] lg:grid-cols-[300px_1fr] overflow-hidden"
         >
-          <div className="relative aspect-3/4 w-full max-w-[320px] mx-auto md:mx-0 overflow-hidden rounded-2xl border-2 border-border/60 shadow-xl">
-            <img
-              src={imageUrl}
-              alt={manga.name}
-              className="h-full w-full object-cover"
-              loading="eager"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE;
-              }}
-            />
+          <div className="flex justify-center md:justify-start">
+            <div className="relative aspect-[3/4] w-full max-w-[240px] sm:max-w-[260px] md:max-w-full overflow-hidden rounded-2xl border-2 border-border/60 shadow-xl shrink-0">
+              <Image
+                src={imageUrl}
+                alt={manga.name}
+                fill
+                sizes="(max-width: 640px) 240px, (max-width: 768px) 260px, 300px"
+                className="object-cover"
+                priority
+                onError={() => setImageError(true)}
+                unoptimized
+              />
+            </div>
           </div>
 
-          <div className="space-y-5 sm:space-y-6">
+          <div className="space-y-5 sm:space-y-6 min-w-0 overflow-hidden">
             <div>
               <h1 className="mb-2.5 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl leading-tight">
                 {manga.name}
@@ -230,10 +267,42 @@ export default function MangaDetailPage() {
               </div>
             )}
 
-            <OpenInAniyomiButton
-              mangaId={manga.id}
-              className="w-full sm:w-auto min-h-[44px] shadow-md hover:shadow-lg transition-all rounded-xl"
-            />
+            {/* Read Button */}
+            {isChapterLoading ? (
+              <Button
+                disabled
+                size="lg"
+                className="w-full sm:w-auto min-h-[44px] shadow-md rounded-xl gap-2"
+              >
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading...
+              </Button>
+            ) : firstChapter ? (
+              <Link href={`/read/${manga.id}/${firstChapter.id}`}>
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto min-h-[44px] shadow-md hover:shadow-lg transition-all rounded-xl gap-2"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  Read in Web
+                </Button>
+              </Link>
+            ) : (
+              <a
+                href={`https://mangadex.org/title/${manga.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto min-h-[44px] shadow-md hover:shadow-lg transition-all rounded-xl gap-2"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  View on MangaDex
+                </Button>
+              </a>
+            )}
           </div>
         </motion.div>
 

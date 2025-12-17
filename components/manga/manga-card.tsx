@@ -2,6 +2,7 @@
 
 import { memo, useMemo, useCallback, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen } from "lucide-react";
 import type { MangaListItem } from "@/lib/api/types";
@@ -81,21 +82,21 @@ const MangaCardComponent = function MangaCard({
       >
         <div className="group relative h-full overflow-hidden rounded-2xl bg-card border border-border/60 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 focus-within:ring-2 focus-within:ring-primary/50 focus-within:ring-offset-2">
           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-t-2xl bg-gradient-to-br from-muted via-muted/50 to-muted">
-            <img
+            <Image
               src={imageUrl}
               alt={`${manga.title} cover image`}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 15vw"
               className={cn(
-                "h-full w-full object-cover transition-all duration-700 group-hover:scale-110",
+                "object-cover transition-all duration-700 group-hover:scale-110",
                 !imageLoaded && "opacity-0",
                 imageLoaded && "opacity-100"
               )}
               loading={loadingStrategy}
-              decoding="async"
-              width={300}
-              height={400}
               onError={handleImageError}
-              onLoad={handleImageLoad}
+              onLoadingComplete={handleImageLoad}
               itemProp="image"
+              unoptimized
             />
 
             {!imageLoaded && (

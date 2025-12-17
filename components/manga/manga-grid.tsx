@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import Image from "next/image";
 import { MangaCard } from "./manga-card";
 import type { MangaListItem } from "@/lib/api/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -91,7 +92,15 @@ const MangaGridComponent = function MangaGrid({
         aria-label="Loading mangas"
         aria-live="polite"
       >
-        <img src="/loading.gif" alt="Loading" className="w-56" />
+        <Image
+          src="/loading.gif"
+          alt="Loading"
+          width={224}
+          height={224}
+          className="w-56"
+          unoptimized
+          priority
+        />
       </div>
     );
   }
