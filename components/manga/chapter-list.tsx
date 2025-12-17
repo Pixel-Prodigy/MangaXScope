@@ -7,10 +7,10 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  BookOpen, 
-  ChevronDown, 
-  ChevronUp, 
+import {
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
   ExternalLink,
   Loader2,
 } from "lucide-react";
@@ -47,7 +47,9 @@ async function fetchChapters(mangaId: string): Promise<ChapterListResponse> {
   let totalExternalChapters = 0;
 
   // Fetch first batch
-  const firstResponse = await fetch(`/api/reader/${mangaId}/chapters?limit=${limit}&offset=0`);
+  const firstResponse = await fetch(
+    `/api/reader/${mangaId}/chapters?limit=${limit}&offset=0`
+  );
   if (!firstResponse.ok) {
     throw new Error("Failed to fetch chapters");
   }
@@ -60,7 +62,9 @@ async function fetchChapters(mangaId: string): Promise<ChapterListResponse> {
   const maxChapters = 500;
   while (allChapters.length < total && allChapters.length < maxChapters) {
     offset += limit;
-    const response = await fetch(`/api/reader/${mangaId}/chapters?limit=${limit}&offset=${offset}`);
+    const response = await fetch(
+      `/api/reader/${mangaId}/chapters?limit=${limit}&offset=${offset}`
+    );
     if (!response.ok) break;
     const data = await response.json();
     if (data.chapters.length === 0) break;
@@ -134,7 +138,7 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
 
   if (data.chapters.length === 0) {
     const hasExternalChapters = data.totalExternal > 0;
-    
+
     return (
       <Card className={`rounded-2xl border-border/60 shadow-sm ${className}`}>
         <CardHeader className="pb-4">
@@ -146,8 +150,10 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
         <CardContent>
           <div className="text-center py-6">
             <p className="text-muted-foreground text-sm mb-3">
-              {hasExternalChapters 
-                ? `${data.totalExternal} chapter${data.totalExternal === 1 ? '' : 's'} available on external sites only (official publishers)`
+              {hasExternalChapters
+                ? `${data.totalExternal} chapter${
+                    data.totalExternal === 1 ? "" : "s"
+                  } available on external sites only (official publishers)`
                 : "No chapters available in English"}
             </p>
             <a
@@ -157,8 +163,8 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
             >
               <Button variant="outline" size="sm" className="gap-2">
                 <ExternalLink className="h-4 w-4" />
-                {hasExternalChapters 
-                  ? "Read on MangaDex" 
+                {hasExternalChapters
+                  ? "Read on MangaDex"
                   : "Check MangaDex for other languages"}
               </Button>
             </a>
@@ -169,8 +175,8 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
   }
 
   // Show first 10 chapters by default, all when expanded
-  const displayedChapters = expanded 
-    ? data.chapters 
+  const displayedChapters = expanded
+    ? data.chapters
     : data.chapters.slice(0, 10);
 
   // Get first chapter for "Start Reading" button
@@ -191,7 +197,7 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
             </CardTitle>
             {hasExternalChapters && (
               <p className="text-xs text-muted-foreground mt-1">
-                +{data.totalExternal} on external sites • {" "}
+                +{data.totalExternal} on external sites •{" "}
                 <a
                   href={`https://mangadex.org/title/${mangaId}`}
                   target="_blank"
@@ -227,17 +233,21 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
                   <div className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 active:bg-muted transition-colors group">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
-                        {chapter.chapter 
-                          ? `Chapter ${chapter.chapter}` 
+                        {chapter.chapter
+                          ? `Chapter ${chapter.chapter}`
                           : chapter.title || "Oneshot"}
                         {chapter.title && chapter.chapter && (
                           <span className="text-muted-foreground font-normal">
-                            {" "}- {chapter.title}
+                            {" "}
+                            - {chapter.title}
                           </span>
                         )}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {chapter.pages} pages • {formatDistanceToNow(new Date(chapter.publishedAt), { addSuffix: true })}
+                        {chapter.pages} pages •{" "}
+                        {formatDistanceToNow(new Date(chapter.publishedAt), {
+                          addSuffix: true,
+                        })}
                       </p>
                     </div>
                     <BookOpen className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 ml-2" />
@@ -272,4 +282,3 @@ export function ChapterList({ mangaId, className }: ChapterListProps) {
     </Card>
   );
 }
-

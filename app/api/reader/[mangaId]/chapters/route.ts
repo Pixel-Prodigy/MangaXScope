@@ -51,8 +51,11 @@ export async function GET(
   try {
     const { mangaId } = await params;
     const searchParams = request.nextUrl.searchParams;
-    
-    const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 100); // MangaDex max is 100
+
+    const limit = Math.min(
+      parseInt(searchParams.get("limit") || "100", 10),
+      100
+    ); // MangaDex max is 100
     const offset = parseInt(searchParams.get("offset") || "0", 10);
     const translatedLanguage = searchParams.get("lang") || "en";
     const order = searchParams.get("order") || "asc"; // asc = oldest first, desc = newest first
@@ -72,12 +75,15 @@ export async function GET(
     apiParams.append("contentRating[]", "pornographic");
     apiParams.append("includes[]", "scanlation_group");
 
-    const response = await fetch(`${MANGADEX_API}/chapter?${apiParams.toString()}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "MangaHook/1.0",
-      },
-    });
+    const response = await fetch(
+      `${MANGADEX_API}/chapter?${apiParams.toString()}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "MangaHook/1.0",
+        },
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -92,7 +98,9 @@ export async function GET(
     const chapters: MangaDexChapter[] = data.data;
 
     // Separate external and readable chapters
-    const readableChapters = chapters.filter((ch) => !ch.attributes.externalUrl);
+    const readableChapters = chapters.filter(
+      (ch) => !ch.attributes.externalUrl
+    );
     const externalChaptersInBatch = chapters.length - readableChapters.length;
 
     // Transform to simpler format
@@ -123,4 +131,3 @@ export async function GET(
     );
   }
 }
-

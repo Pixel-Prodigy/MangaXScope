@@ -55,7 +55,9 @@ export default function MangaDetailPage() {
   const { data: chapterData, isLoading: isChapterLoading } = useQuery({
     queryKey: ["first-chapter", mangaId],
     queryFn: async (): Promise<ChapterListResponse> => {
-      const response = await fetch(`/api/reader/${mangaId}/chapters?limit=1&offset=0`);
+      const response = await fetch(
+        `/api/reader/${mangaId}/chapters?limit=1&offset=0`
+      );
       if (!response.ok) throw new Error("Failed to fetch chapters");
       return response.json();
     },
@@ -130,7 +132,9 @@ export default function MangaDetailPage() {
     );
   }
 
-  const imageUrl = imageError ? PLACEHOLDER_IMAGE : (manga.imageUrl || PLACEHOLDER_IMAGE);
+  const imageUrl = imageError
+    ? PLACEHOLDER_IMAGE
+    : manga.imageUrl || PLACEHOLDER_IMAGE;
 
   return (
     <>
